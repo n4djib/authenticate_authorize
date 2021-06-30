@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        ul {
+            text-align: right;
+        }
+        ul li {
+            display: inline;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        ul li a {
+            color: black;
+            text-decoration: none;
+        }
+        ul li a:visited {
+            color: black;
+        }
+        ul li a:hover {
+            color: black;
+            text-decoration: underline;
+        }
+        .alert {
+          padding: 20px;
+          background-color: #f44336;
+          color: white;
+          margin: 10px 40px;
+        }
+        .info {
+          padding: 20px;
+          background-color: #2196F3;
+          color: white;
+          margin: 10px 40px;
+        }
+        .closebtn {
+          margin-left: 15px;
+          color: white;
+          font-weight: bold;
+          float: right;
+          font-size: 22px;
+          line-height: 20px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+        .closebtn:hover {
+          color: black;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="{{url_for('main.index')}}">Home</a></li>
+            {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('main.profile')}}">({{current_user.name}}) Profile</a></li>
+            {% endif %}
+            {% if not current_user.is_authenticated %}
+            <li><a href="{{url_for('auth.login')}}">Login</a></li>
+            <li><a href="{{url_for('auth.signup')}}">Signup</a></li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+            <li><a href="{{url_for('auth.logout')}}">Logout</a></li>
+            {% endif %}
+        </ul>
+    </header>
+    <section>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                {{ messages[0] }}
+            </div>
+        {% endif %}
+        {% endwith %}
+    </section>
+
+    {% block content %}
+    
+    {% endblock %}
+    
+</body>
+</html>
