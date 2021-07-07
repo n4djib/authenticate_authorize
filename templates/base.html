@@ -28,13 +28,13 @@
           padding: 20px;
           background-color: #f44336;
           color: white;
-          margin: 10px 40px;
+          /*margin: 10px 40px;*/
         }
         .info {
           padding: 20px;
           background-color: #2196F3;
           color: white;
-          margin: 10px 40px;
+          /*margin: 10px 40px;*/
         }
         .closebtn {
           margin-left: 15px;
@@ -56,7 +56,7 @@
         <ul>
             <li><a href="{{url_for('main.index')}}">Home</a></li>
             {% if current_user.is_authenticated %}
-            <li><a href="{{url_for('main.profile')}}">({{current_user.name}}) Profile</a></li>
+            <li><a href="{{url_for('main.profile')}}">({{current_user.username}}) Profile</a></li>
             {% endif %}
             {% if not current_user.is_authenticated %}
             <li><a href="{{url_for('auth.login')}}">Login</a></li>
@@ -67,20 +67,29 @@
             {% endif %}
         </ul>
     </header>
-    <section>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-                {{ messages[0] }}
-            </div>
-        {% endif %}
-        {% endwith %}
-    </section>
 
+    <flash>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert">
+            <span class="closebtn"
+             onclick="this.parentElement.style.display='none';"
+            >&times;</span> 
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    </flash>
+
+    <main>
     {% block content %}
     
     {% endblock %}
+    </main>
+
+    <footer>
+      this it the site footer
+    </footer>
     
 </body>
 </html>

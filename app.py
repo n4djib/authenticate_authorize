@@ -1,14 +1,17 @@
 from flask import Flask, Blueprint, render_template
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 
+
+
+GLOBAL_VAR = "azerty" 
 
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'thisis maysecret key'
+    app.config['SECRET_KEY'] = 'this is my secret key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -29,5 +32,8 @@ def create_app():
 
     from main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    from blog import blog as blog_blueprint
+    app.register_blueprint(blog_blueprint)
 
     return app

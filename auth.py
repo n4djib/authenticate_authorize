@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, login_required
 from app import db
 
 
@@ -20,7 +20,6 @@ def login():
             return redirect(url_for('main.index'))
 
         login_user(user, remember=remember)
-
         return redirect(url_for('main.profile'))
     else:
         return render_template('login.html')
@@ -30,7 +29,7 @@ def signup():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        name = request.form.get('name')
+        username = request.form.get('username')
 
         user = User.query.filter_by(email=email).first()
         if user:
@@ -39,7 +38,7 @@ def signup():
 
         password_hash = generate_password_hash(password, method='sha256')
 
-        new_user = User(email=email, password=password_hash, name=name)
+        new_user = User(email=email, password=password_hash, username=username)
 
         db.session.add(new_user)
         db.session.commit()
@@ -48,6 +47,7 @@ def signup():
         return render_template('signup.html')
 
 @auth.route('/logout')
+@login_required
 def logout():
     flash('You are now logged out')
     logout_user()
